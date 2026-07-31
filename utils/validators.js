@@ -1,4 +1,4 @@
-import { AppError } from "../errors/appErrors";
+import { AppError } from "../errors/AppErrors.js";
 
 export function validatePositiveInteger(value, fieldName) {
   if (value === "") {
