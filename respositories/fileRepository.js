@@ -30,16 +30,6 @@ export async function uploadFile(file) {
   }
 }
 
-export async function updateFile(fileName, content) {
-  const query = `UPDATE files SET content = $2 WHERE file_name = $1`;
-
-  const result = await pool.query(query, [fileName, content]);
-  if (result.rowCount === 0) {
-    return false;
-  }
-
-  return true;
-}
 
 //Delete file
 export async function getFileById(id) {
@@ -114,7 +104,7 @@ export async function getFilesCount({ search, fromDate, toDate }) {
   const conditions = [];
 
   if (search) {
-    conditions.push(`file_name ILIKE $${values.length + 1}`);
+    conditions.push(`original_name ILIKE $${values.length + 1}`);
     values.push(`%${search}%`);
   }
   if (fromDate) {
