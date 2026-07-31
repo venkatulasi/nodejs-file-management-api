@@ -34,7 +34,13 @@ export async function listFiles({
   limit = Number(limit);
   const offset = (page - 1) * limit;
 
-  const allowedSortFields = ["file_name", "created_at"];
+  const allowedSortFields = [
+    "original_name",
+    "stored_name",
+    "mime_type",
+    "size",
+    "created_at",
+  ];
 
   if (!allowedSortFields.includes(sort)) {
     sort = "created_at";
