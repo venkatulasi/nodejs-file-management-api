@@ -1,14 +1,15 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { AppError } from "../errors/appErrors.js";
+import { AppError } from "../errors/AppErrors.js";
 import {
-  createFile as createFileRipository,
+  uploadFile as uploadFileRipository,
   getFile as getFileRipository,
   updateFile as updateFileRepository,
   deleteFile as deleteFileRepository,
   getFiles as getFilesRepository,
   getFilesCount as getFilesCountRepository,
+  getFileById as getFileByIdRepository,
 } from "../respositories/fileRepository.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,9 +21,17 @@ function getFilePath(fileName) {
 }
 
 // get list
-export async function listFiles({ page, limit, search, sort, order, fromDate, toDate }) {
-  page = Number(page) || 1;
-  limit = Number(limit) || 10;
+export async function listFiles({
+  page,
+  limit,
+  search,
+  sort,
+  order,
+  fromDate,
+  toDate,
+}) {
+  page = Number(page);
+  limit = Number(limit);
   const offset = (page - 1) * limit;
 
   const allowedSortFields = ["file_name", "created_at"];
@@ -39,8 +48,20 @@ export async function listFiles({ page, limit, search, sort, order, fromDate, to
     order = "desc";
   }
 
-  const files =  await getFilesRepository({ search, sort, order, limit, offset, fromDate, toDate });
-  const totalRecords = await getFilesCountRepository({search,fromDate,toDate});
+  const files = await getFilesRepository({
+    search,
+    sort,
+    order,
+    limit,
+    offset,
+    fromDate,
+    toDate,
+  });
+  const totalRecords = await getFilesCountRepository({
+    search,
+    fromDate,
+    toDate,
+  });
 
   const totalPages = Math.ceil(totalRecords / limit);
 
@@ -52,41 +73,38 @@ export async function listFiles({ page, limit, search, sort, order, fromDate, to
       totalRecords,
       totalPages,
       hasNextPage: page < totalPages,
-      hasPreviousPage: page > 1
-    }
-  }
-}
-
-// read file context
-export async function readContent(fileName) {
-  const file = await getFileRipository(fileName);
-  if (!file) {
-    throw new AppError("File not found", 404);
-  }
-  return file;
+      hasPreviousPage: page > 1,
+    },
+  };
 }
 
 // create file post method
-export async function createFile(fileName, content) {
-  await createFileRipository(fileName, content);
-}
-
-//update file pu method
-export async function updateFile(fileName, content) {
-  const updated = await updateFileRepository(fileName, content);
-
-  if (!updated) {
-    throw new AppError("File not found", 404);
+export async function uploadFile(file) {
+  try {
+    await uploadFileRipository({
+      originalName: file.originalName,
+      storedName: file.storedName,
+      path: file.path,
+      mimeType: file.mimeType,
+      size: file.size,
+    });
+  } catch (error) {
+    await fs.unlink(file.path);
+    throw error;
   }
 }
 
-//delete file
-export async function deleteFile(fileName) {
-  const filePath = getFilePath(fileName);
+//Delete file
+export async function deleteFile(id) {
+  const file = getFileByIdRepository(id);
 
-  const deleted = await deleteFileRepository(fileName);
-
-  if (!deleted) {
-    throw new AppError("File not found", 404);
+  if (!file) {
+    throw new AppError("File not found", 400);
   }
+
+  //Delete physical file first
+  await fs.unlink(file.path);
+
+  //Then delete database record
+  const deleted = await deleteFileRepository(id);
 }

@@ -1,13 +1,12 @@
 import express from "express";
 import {
   getFiles,
-  getFile,
-  createFile as createFileController,
-  updateFile as updateFileController,
+  uploadFile as uploadFileController,
   deleteFile as deleteFileController,
 } from "../controllers/fileController.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { validationPagination } from "../middleware/validatePagination.js";
+import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
@@ -16,9 +15,11 @@ router.get(
   asyncHandler(validationPagination),
   asyncHandler(getFiles),
 );
-router.get("/files/:fileName", asyncHandler(getFile));
-router.post("/files", asyncHandler(createFileController));
-router.put("/files/:fileName", asyncHandler(updateFileController));
-router.delete("/files/:fileName", asyncHandler(deleteFileController));
+router.post(
+  "/files/upload",
+  upload.single("file"),
+  asyncHandler(uploadFileController),
+);
+router.delete("/files/:id", asyncHandler(deleteFileController));
 
 export default router;

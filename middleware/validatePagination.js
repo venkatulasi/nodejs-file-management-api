@@ -1,16 +1,4 @@
-import { validatePositiveInteger } from "../utils/validators";
-
-// export function createValidation(req,res,next){
-//     const { fileName, content} = req.body;
-
-//     if(!fileName || !content){
-//         return res.status(400).json({
-//             message: "File name and content are requried"
-//         })
-//     }
-
-//     next();
-// }
+import { validatePositiveInteger } from "../utils/validators.js";
 
 export function validationPagination(req, res, next) {
   const { page, limit } = req.body;
