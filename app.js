@@ -1,5 +1,6 @@
 import express from "express";
 import fileRoutes from "./routes/fileRoutes.js";
+import authRoutes from "./routes/auth.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { config } from "./config/config.js";
 import { logger } from "./middleware/logger.js";
@@ -12,6 +13,7 @@ app.use(logger);
 app.use(express.json());
 
 app.use(fileRoutes);
+app.use("/auth",authRoutes);
 
 app.use(errorHandler);
 

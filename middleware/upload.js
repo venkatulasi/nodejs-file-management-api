@@ -1,5 +1,5 @@
 import multer from "multer";
-import { AppError } from "../errors/AppErrors";
+import { AppError } from "../errors/AppErrors.js";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

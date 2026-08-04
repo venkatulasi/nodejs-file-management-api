@@ -7,7 +7,24 @@ export async function getUserByEmailRepository(email) {
         FROM users
         WHERE email = $1`;
 
-  const result = await query(query, [email]);
+  const result = await pool.query(query, [email]);
+
+  return result.rows[0] || null;
+}
+
+export async function getUserForLoginRepository(email) {
+  const query = `
+        SELECT 
+            id,
+            email,
+            password,
+            role,
+            is_active
+        FROM users
+        WHERE email = $1
+  `;
+
+  const result = await pool.query(query, [email]);
 
   return result.rows[0] || null;
 }
@@ -20,6 +37,7 @@ export async function createUserRepositroy({ name, email, password }) {
             password
         )
         VALUES ($1, $2, $3)
+        RETURNING id, name, email, role, is_active, created_at 
     `;
   const values = [name, email, password];
   try {

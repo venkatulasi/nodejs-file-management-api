@@ -4,13 +4,11 @@ import { fileURLToPath } from "url";
 import { AppError } from "../errors/AppErrors.js";
 import {
   uploadFile as uploadFileRipository,
-  getFile as getFileRipository,
-  updateFile as updateFileRepository,
   deleteFile as deleteFileRepository,
   getFiles as getFilesRepository,
   getFilesCount as getFilesCountRepository,
   getFileById as getFileByIdRepository,
-} from "../respositories/fileRepository.js";
+} from "../repositories/fileRepository.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,8 +28,8 @@ export async function listFiles({
   fromDate,
   toDate,
 }) {
-  page = Number(page);
-  limit = Number(limit);
+  page = Number(page) || 1;
+  limit = Number(limit) || 10;
   const offset = (page - 1) * limit;
 
   const allowedSortFields = [
@@ -86,14 +84,9 @@ export async function listFiles({
 
 // create file post method
 export async function uploadFile(file) {
+  console.log("files",file)
   try {
-    await uploadFileRipository({
-      originalName: file.originalName,
-      storedName: file.storedName,
-      path: file.path,
-      mimeType: file.mimeType,
-      size: file.size,
-    });
+    await uploadFileRipository(file);
   } catch (error) {
     await fs.unlink(file.path);
     throw error;

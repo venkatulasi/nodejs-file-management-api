@@ -1,8 +1,6 @@
 import {
   listFiles,
-  readContent,
   uploadFile as uploadFileService,
-  updateFile as updateFileService,
   deleteFile as deleteFileService,
 } from "../services/fileServices.js";
 
@@ -20,14 +18,10 @@ export async function getFiles(req, res) {
   res.json(files);
 }
 
-export async function getFile(req, res) {
-  const fileName = req.params.fileName;
-  const content = await readContent(fileName);
-  res.json(content);
-}
-
 export async function uploadFile(req, res) {
 
+  console.log("controller file", req.file)
+  console.log("controller file", req.body)
   await uploadFileService(req.file);
 
   res.status(201).json({

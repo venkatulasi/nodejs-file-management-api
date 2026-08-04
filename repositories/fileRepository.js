@@ -12,16 +12,17 @@ export async function uploadFile(file) {
               size
       ) 
       VALUES ($1, $2, $3, $4, $5)`;
-  const value = [
-    file.originalName,
-    file.storedName,
+
+  const values = [
+    file.originalname,
+    file.filename,
     file.path,
-    file.mimeType,
+    file.mimetype,
     file.size,
   ];
 
   try {
-    await pool.query(query, value);
+    await pool.query(query, values);
   } catch (error) {
     if (error.code === "23505") {
       throw new AppError("File already exists.", 409);
@@ -29,7 +30,6 @@ export async function uploadFile(file) {
     throw error;
   }
 }
-
 
 //Delete file
 export async function getFileById(id) {
@@ -58,14 +58,14 @@ export async function getFiles({
 }) {
   let query = `SELECT 
                 id,
-                file_name,
+                original_name,
                 created_at 
               FROM files`;
   const values = [];
   const conditions = [];
 
   if (search) {
-    conditions.push(`file_name ILIKE $${values.length + 1}`);
+    conditions.push(`original_name ILIKE $${values.length + 1}`);
     values.push(`%${search}%`);
   }
   if (fromDate) {
@@ -78,7 +78,7 @@ export async function getFiles({
   }
 
   if (conditions.length > 0) {
-    query += `WHERE ${conditions.join(" AND ")}`;
+    query += ` WHERE ${conditions.join(" AND ")}`;
   }
 
   query += ` ORDER BY ${sort} ${order}`;
