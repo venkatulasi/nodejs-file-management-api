@@ -1,0 +1,35 @@
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"POST /auth/login null 304ms"}
+{"level":"info","message":"POST /auth/refresh null 70ms"}
+{"level":"info","message":"GET /files null 89ms"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}

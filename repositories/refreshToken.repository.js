@@ -60,7 +60,7 @@ export async function deleteRefreshTokenRepository(token, client = pool) {
         WHERE token = $1
         RETURNING id
     `;
-    const result = await clinet.query(query, [token]);
+    const result = await client.query(query, [token]);
 
     return result.rows[0] || null;
 }

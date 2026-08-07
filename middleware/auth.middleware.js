@@ -16,7 +16,11 @@ export function authMiddleware(req, res, next) {
 
   try {
     const decoded = verifyToken(token);
-    req.user = decoded;
+    req.user = {
+      id: decoded.sub,
+      email: decoded.email,
+      role: decoded.role,
+    };
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {

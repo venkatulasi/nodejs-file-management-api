@@ -7,27 +7,17 @@ import {
   deleteFile as deleteFileRepository,
   getFiles as getFilesRepository,
   getFilesCount as getFilesCountRepository,
-  getFileById as getFileByIdRepository,
+  getFileByIdRepository,
+  updateFileNameRepository,
+  softDeleteFileRepository,
 } from "../repositories/fileRepository.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// reusable function
-function getFilePath(fileName) {
-  return path.join(__dirname, "../data", fileName);
-}
+import { ensureFileOwnership } from "../utils/authorization.js";
 
 // get list
-export async function listFiles({
-  page,
-  limit,
-  search,
-  sort,
-  order,
-  fromDate,
-  toDate,
-}) {
+export async function listFiles(
+  { page, limit, search, sort, order, fromDate, toDate },
+  user,
+) {
   page = Number(page) || 1;
   limit = Number(limit) || 10;
   const offset = (page - 1) * limit;
@@ -52,6 +42,8 @@ export async function listFiles({
     order = "desc";
   }
 
+  const userId = user.role === "admin" ? null : user.id;
+
   const files = await getFilesRepository({
     search,
     sort,
@@ -60,11 +52,13 @@ export async function listFiles({
     offset,
     fromDate,
     toDate,
+    userId,
   });
   const totalRecords = await getFilesCountRepository({
     search,
     fromDate,
     toDate,
+    userId,
   });
 
   const totalPages = Math.ceil(totalRecords / limit);
@@ -83,10 +77,9 @@ export async function listFiles({
 }
 
 // create file post method
-export async function uploadFile(file) {
-  console.log("files",file)
+export async function uploadFile(file, userId) {
   try {
-    await uploadFileRipository(file);
+    await uploadFileRipository(file, userId);
   } catch (error) {
     await fs.unlink(file.path);
     throw error;
@@ -94,16 +87,91 @@ export async function uploadFile(file) {
 }
 
 //Delete file
-export async function deleteFile(id) {
-  const file = getFileByIdRepository(id);
+export async function softDeleteFileService(id, user) {
+
+  const file = await getFileByIdRepository(id);
 
   if (!file) {
-    throw new AppError("File not found", 400);
+    throw new AppError("File not found", 404);
   }
 
-  //Delete physical file first
-  await fs.unlink(file.path);
+  if (file.is_deleted) {
+    return {
+      success: true,
+      message: "File already deleted",
+    };
+  }
+  
+  ensureFileOwnership(file, user);
+  
+  const deleteFile = await softDeleteFileRepository(file.id);
 
-  //Then delete database record
-  const deleted = await deleteFileRepository(id);
+  if (!deleteFile) {
+    throw new AppError("File not found", 404);
+  }
+
+  
+
+  return {
+    success: true,
+    message: "File deleted successfully",
+  };
+}
+
+//Download file
+export async function downloadFileService(fileId, user) {
+  const file = await getFileByIdRepository(fileId);
+
+  if (!file) {
+    throw new AppError("File not found", 404);
+  }
+
+  if (file.is_deleted) {
+    throw new AppError("File already deleted", 404);
+  }
+
+  ensureFileOwnership(file, user);
+
+  try {
+    await fs.access(file.path);
+  } catch (error) {
+    throw new AppError("File not found", 404);
+  }
+
+  return file;
+}
+
+export async function renameFileService(originalName, fileId, user) {
+  const file = await getFileByIdRepository(fileId);
+
+  if (!file) {
+    throw new AppError("File not found", 404);
+  }
+
+  if(file.is_deleted){
+    throw new AppError("File already deleted", 404)
+  }
+
+  ensureFileOwnership(file, user);  
+
+  const newFileName = originalName.trim();
+
+  if (file.original_name === newFileName) {
+    return {
+      success: true,
+      message: "No changes made",
+    };
+  }
+
+  const updateFile = await updateFileNameRepository(newFileName, fileId);
+
+  if (!updateFile) {
+    throw new AppError("File not found", 404);
+  }
+
+  return {
+    success: true,
+    message: "File renamed successfully",
+    file: updateFile,
+  };
 }

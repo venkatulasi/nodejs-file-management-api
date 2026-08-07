@@ -2,16 +2,17 @@ import { pool } from "../database/db.js";
 import { AppError } from "../errors/AppErrors.js";
 
 //Create
-export async function uploadFile(file) {
+export async function uploadFile(file, userId) {
   const query = `
       INSERT INTO files(
               original_name, 
               stored_name,
               path,
               mime_type,
-              size
+              size,
+              user_id
       ) 
-      VALUES ($1, $2, $3, $4, $5)`;
+      VALUES ($1, $2, $3, $4, $5, $6)`;
 
   const values = [
     file.originalname,
@@ -19,6 +20,7 @@ export async function uploadFile(file) {
     file.path,
     file.mimetype,
     file.size,
+    userId
   ];
 
   try {
@@ -34,7 +36,7 @@ export async function uploadFile(file) {
 //Delete file
 export async function getFileById(id) {
   const query = `SELECT * FROM files WHERE id = $1`;
-  const result = await pool.query(query, [i]);
+  const result = await pool.query(query, [id]);
   return result.rows[0] || null;
 }
 
@@ -55,6 +57,7 @@ export async function getFiles({
   offset,
   fromDate,
   toDate,
+  userId
 }) {
   let query = `SELECT 
                 id,
@@ -62,8 +65,12 @@ export async function getFiles({
                 created_at 
               FROM files`;
   const values = [];
-  const conditions = [];
+  const conditions = ["is_deleted = FALSE"];
 
+  if(userId !== null){
+    conditions.push(`user_id = $${values.length + 1}`);
+    values.push(userId); 
+  }
   if (search) {
     conditions.push(`original_name ILIKE $${values.length + 1}`);
     values.push(`%${search}%`);
@@ -95,14 +102,18 @@ export async function getFiles({
   return result.rows;
 }
 
-export async function getFilesCount({ search, fromDate, toDate }) {
+export async function getFilesCount({ search, fromDate, toDate, userId }) {
   let query = `SELECT 
                 COUNT(*) AS total
               FROM files`;
 
   const values = [];
-  const conditions = [];
+  const conditions = ["is_deleted = FALSE"];
 
+  if (userId !== null) {
+    conditions.push(`user_id = $${values.length + 1}`);
+    values.push(userId);
+  }
   if (search) {
     conditions.push(`original_name ILIKE $${values.length + 1}`);
     values.push(`%${search}%`);
@@ -122,4 +133,58 @@ export async function getFilesCount({ search, fromDate, toDate }) {
 
   const result = await pool.query(query, values);
   return Number(result.rows[0].total);
+}
+
+export async function getFileByIdRepository(fileId) {
+  
+  const query = `
+    SELECT 
+      original_name,
+      stored_name,
+      path,
+      mime_type,
+      size,
+       user_id,
+      is_deleted,
+      deleted_at
+    FROM files
+    WHERE id = $1
+  `;
+
+  const result = await pool.query(query, [fileId]);
+
+  return result.rows[0] || null;
+}
+
+export async function updateFileNameRepository(originalName,fileId) {
+
+  const query = `
+    UPDATE files
+    SET original_name = $1
+    WHERE id = $2
+    RETURNING id, original_name
+  `;
+
+  const result = pool.query(query,[originalName,fileId]);
+
+  return (await result).rows[0] || null;
+  
+}
+
+export async function softDeleteFileRepository(fileId) {
+  
+  const query = `
+    UPDATE files 
+    SET 
+      is_deleted = TRUE,
+      deleted_at = CURRENT_TIMESTAMP
+    WHERE
+      id = $1
+      AND is_deleted = FALSE
+    RETURNING id
+  `;
+
+  const result = await pool.query(query, [fileId]);
+
+  return result.rows[0] || null;
 }

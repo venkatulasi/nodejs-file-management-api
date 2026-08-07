@@ -33,10 +33,11 @@ export function validateLogin(req, res, next) {
 }
 
 export function validateRefresh(req, res, next) {
-  const { refreshToken } = req.body;
+  
+  const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) {
-    throw new AppError("Refresh token is required", 400);
+    throw new AppError("Refresh token is required", 401);
   }
   next();
 }

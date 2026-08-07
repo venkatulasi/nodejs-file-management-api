@@ -13,6 +13,7 @@ import {
 import ms from "ms";
 import {
   createRefreshTokenRepository,
+  deleteRefreshTokenRepository,
   getRefreshTokenRepository,
   getUserByIdRepository,
 } from "../repositories/refreshToken.repository.js";
@@ -132,3 +133,13 @@ export async function refreshService(refreshToken) {
     client.release();
   }
 }
+
+export async function logoutService(refreshToken) {
+  
+  if(!refreshToken){
+    return;
+  }
+
+  await deleteRefreshTokenRepository(refreshToken)
+}
+
