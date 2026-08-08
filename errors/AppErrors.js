@@ -4,6 +4,7 @@ export class AppError extends Error {
 
     this.name = this.constructor.name;
     this.statusCode = statusCode;
+    this.isOperational = true;
 
     Error.captureStackTrace?.(this, this.constructor); //removes constructor frames from the stack, making debugging easier.
   }
