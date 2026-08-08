@@ -1,8 +1,9 @@
 import { pool } from "../database/db.js";
 import { AppError } from "../errors/AppErrors.js";
+import { handleDatabaseError } from "../errors/databaseError.js";
 
 //Create
-export async function uploadFile(file, userId) {
+export async function uploadFile(file, userId, client) {
   const query = `
       INSERT INTO files(
               original_name, 
@@ -12,7 +13,9 @@ export async function uploadFile(file, userId) {
               size,
               user_id
       ) 
-      VALUES ($1, $2, $3, $4, $5, $6)`;
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id, original_name, stored_name
+      `;
 
   const values = [
     file.originalname,
@@ -20,32 +23,15 @@ export async function uploadFile(file, userId) {
     file.path,
     file.mimetype,
     file.size,
-    userId
+    userId,
   ];
 
   try {
-    await pool.query(query, values);
+    const result = await client.query(query, values);
+    return result.rows[0];
   } catch (error) {
-    if (error.code === "23505") {
-      throw new AppError("File already exists.", 409);
-    }
-    throw error;
+    throw handleDatabaseError(error);
   }
-}
-
-//Delete file
-export async function getFileById(id) {
-  const query = `SELECT * FROM files WHERE id = $1`;
-  const result = await pool.query(query, [id]);
-  return result.rows[0] || null;
-}
-
-export async function deleteFile(id) {
-  const query = `DELETE FROM files WHERE id = $1`;
-
-  const result = await pool.query(query, [id]);
-
-  return result.rowCount > 0;
 }
 
 //Read files
@@ -57,7 +43,7 @@ export async function getFiles({
   offset,
   fromDate,
   toDate,
-  userId
+  userId,
 }) {
   let query = `SELECT 
                 id,
@@ -67,9 +53,9 @@ export async function getFiles({
   const values = [];
   const conditions = ["is_deleted = FALSE"];
 
-  if(userId !== null){
+  if (userId !== null && userId !== undefined) {
     conditions.push(`user_id = $${values.length + 1}`);
-    values.push(userId); 
+    values.push(userId);
   }
   if (search) {
     conditions.push(`original_name ILIKE $${values.length + 1}`);
@@ -136,7 +122,6 @@ export async function getFilesCount({ search, fromDate, toDate, userId }) {
 }
 
 export async function getFileByIdRepository(fileId) {
-  
   const query = `
     SELECT 
       original_name,
@@ -151,13 +136,14 @@ export async function getFileByIdRepository(fileId) {
     WHERE id = $1
   `;
 
-  const result = await pool.query(query, [fileId]);
+  
+    const result = await pool.query(query, [fileId]);
 
-  return result.rows[0] || null;
+    return result.rows[0] || null;
+  
 }
 
-export async function updateFileNameRepository(originalName,fileId) {
-
+export async function updateFileNameRepository(originalName, fileId, client) {
   const query = `
     UPDATE files
     SET original_name = $1
@@ -165,14 +151,17 @@ export async function updateFileNameRepository(originalName,fileId) {
     RETURNING id, original_name
   `;
 
-  const result = pool.query(query,[originalName,fileId]);
+  try {
+    const result = await client.query(query, [originalName, fileId]);
 
-  return (await result).rows[0] || null;
-  
+    return result.rows[0] || null;
+  } catch (error) {
+    throw handleDatabaseError(error);
+  }
 }
 
-export async function softDeleteFileRepository(fileId) {
-  
+//Delete
+export async function softDeleteFileRepository(fileId, client) {
   const query = `
     UPDATE files 
     SET 
@@ -184,7 +173,11 @@ export async function softDeleteFileRepository(fileId) {
     RETURNING id
   `;
 
-  const result = await pool.query(query, [fileId]);
+  try {
+    const result = await client.query(query, [fileId]);
 
-  return result.rows[0] || null;
+    return result.rows[0] || null;
+  } catch (error) {
+    throw handleDatabaseError(error);
+  }
 }

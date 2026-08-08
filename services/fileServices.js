@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 import { AppError } from "../errors/AppErrors.js";
 import {
   uploadFile as uploadFileRipository,
-  deleteFile as deleteFileRepository,
   getFiles as getFilesRepository,
   getFilesCount as getFilesCountRepository,
   getFileByIdRepository,
@@ -12,6 +11,11 @@ import {
   softDeleteFileRepository,
 } from "../repositories/fileRepository.js";
 import { ensureFileOwnership } from "../utils/authorization.js";
+import { recordAuditLog } from "./audit.service.js";
+import { pool } from "../database/db.js";
+import { createAuditLog } from "../repositories/audit.repository.js";
+import logger from "../logger/logger.js";
+import { validateFileName } from "../utils/validators.js";
 
 // get list
 export async function listFiles(
@@ -78,17 +82,54 @@ export async function listFiles(
 
 // create file post method
 export async function uploadFile(file, userId) {
+
+  const client = await pool.connect();
+
   try {
-    await uploadFileRipository(file, userId);
+    await client.query("BEGIN");
+
+    const createdFile = await uploadFileRipository(file, userId, client);
+
+    await createAuditLog({
+      userId: userId,
+      action: "FILE_UPLOADED",
+      resourceType: "file",
+      resourceId: createdFile.id,
+      metadata: {
+        file_name: createdFile.original_name,
+        stored_name: createdFile.stored_name,
+      }
+    },
+    client
+  );
+
+   await client.query("COMMIT");
+
+   return {
+    success: true,
+    message: "File uploaded successfully",
+    file: createdFile
+   }
+
   } catch (error) {
-    await fs.unlink(file.path);
-    throw error;
+    await client.query("ROLLBACK");
+
+    try {
+      await fs.unlink(file.path);  
+    } catch (unlinkError) {
+      logger.error("Failed to remove uploaded file",{
+        error: unlinkError,
+        path: file.path,
+      })
+    }
+    throw error;    
+  }finally{
+    client.release();
   }
 }
 
 //Delete file
 export async function softDeleteFileService(id, user) {
-
   const file = await getFileByIdRepository(id);
 
   if (!file) {
@@ -101,21 +142,44 @@ export async function softDeleteFileService(id, user) {
       message: "File already deleted",
     };
   }
-  
+
   ensureFileOwnership(file, user);
-  
-  const deleteFile = await softDeleteFileRepository(file.id);
+  const client = await pool.connect();
 
-  if (!deleteFile) {
-    throw new AppError("File not found", 404);
+  try {
+    await client.query("BEGIN");
+
+    const deleteFile = await softDeleteFileRepository(file.id, client);
+
+    if (!deleteFile) {
+      throw new AppError("File not found", 404);
+    }
+
+    await recordAuditLog(
+      {
+        userId: user.id,
+        action: "FILE_DELETED",
+        resourceType: "file",
+        resourceId: id,
+        metadata: {
+          file_name: file.original_name,
+        },
+      },
+      client,
+    );
+
+    await client.query("COMMIT");
+
+    return {
+      success: true,
+      message: "File deleted successfully",
+    };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
   }
-
-  
-
-  return {
-    success: true,
-    message: "File deleted successfully",
-  };
 }
 
 //Download file
@@ -138,6 +202,16 @@ export async function downloadFileService(fileId, user) {
     throw new AppError("File not found", 404);
   }
 
+  await createAuditLog({
+    userId: user.id,
+    action: "FILE_DOWNLOADED",
+    resourceType: "file",
+    resourceId: fileId,
+    metadata: {
+      file_name: file.original_name
+    }
+  })
+
   return file;
 }
 
@@ -148,13 +222,13 @@ export async function renameFileService(originalName, fileId, user) {
     throw new AppError("File not found", 404);
   }
 
-  if(file.is_deleted){
-    throw new AppError("File already deleted", 404)
+  if (file.is_deleted) {
+    throw new AppError("File already deleted", 404);
   }
 
-  ensureFileOwnership(file, user);  
+  ensureFileOwnership(file, user);
 
-  const newFileName = originalName.trim();
+  const newFileName = validateFileName(originalName);
 
   if (file.original_name === newFileName) {
     return {
@@ -163,15 +237,44 @@ export async function renameFileService(originalName, fileId, user) {
     };
   }
 
-  const updateFile = await updateFileNameRepository(newFileName, fileId);
+  const client = await pool.connect();
 
-  if (!updateFile) {
-    throw new AppError("File not found", 404);
+  try {
+    await client.query("BEGIN");
+
+    const updatedFile = await updateFileNameRepository(newFileName, fileId, client);
+
+    if (!updatedFile) {
+      throw new AppError("File not found", 404);
+    }
+
+    await recordAuditLog(
+      {
+        userId: user.id,
+        action: "FILE_RENAMED",
+        resourceType: "file",
+        resourceId: fileId,
+        metadata: {
+          old_name: file.original_name,
+          new_name: newFileName,
+        },
+      },
+      client,
+    );
+
+    await client.query("COMMIT");
+
+    return {
+      success: true,
+      message: "File renamed successfully",
+      file: updatedFile,
+    };
+
+    
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
   }
-
-  return {
-    success: true,
-    message: "File renamed successfully",
-    file: updateFile,
-  };
 }

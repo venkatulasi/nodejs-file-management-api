@@ -25,11 +25,9 @@ export async function getFiles(req, res) {
 }
 
 export async function uploadFile(req, res) {
-  await uploadFileService(req.file, req.user.id);
+  const result = await uploadFileService(req.file, req.user.id);
 
-  res.status(201).json({
-    message: "File uploaded successfully",
-  });
+  res.status(201).json(result);
 }
 
 export async function deleteFile(req, res) {
