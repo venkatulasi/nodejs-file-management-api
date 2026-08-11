@@ -41,10 +41,11 @@ export async function createUserRepositroy({ name, email, password }) {
     `;
   const values = [name, email, password];
   try {
-    await pool.query(query, values);
+    const result = await pool.query(query, values);
+    return result.rows[0] || null;
   } catch (error) {
     if (error.code === "23505") {
-      throw AppError("Email already exists", 409);
+      throw new AppError("Email already exists", 409);
     }
     throw error;
   }

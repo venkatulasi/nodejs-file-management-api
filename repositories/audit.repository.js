@@ -1,3 +1,5 @@
+import { pool } from "../database/db.js";
+
 
 
 export async function createAuditLog({
@@ -6,7 +8,7 @@ export async function createAuditLog({
   resourceType,
   resourceId,
   metadata,
-},client = pool ) {
+},client =  pool) {
   const query = `
         INSERT INTO audit_logs(
             user_id,

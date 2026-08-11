@@ -23,7 +23,7 @@ export async function registerService(name, email, password) {
   const existingUser = await getUserByEmailRepository(email);
 
   if (existingUser) {
-    throw AppError("Email already exists", 409);
+    throw new AppError("Email already exists", 409);
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);

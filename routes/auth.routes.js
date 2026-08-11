@@ -3,12 +3,14 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { validateLogin, validateRefresh, validateRegister } from "../middleware/auth.validation.js";
 import { login, logout, refresh, register } from "../controllers/auth.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
+import { authLimiter } from "../middleware/rateLimiter.js";
+import { originCheck } from "../middleware/originCheck.js";
 
 const router = Router();
 
 router.post("/register", validateRegister, asyncHandler(register));
-router.post("/login",validateLogin, asyncHandler(login));
-router.post("/logout",  asyncHandler(logout));
-router.post("/refresh", validateRefresh, asyncHandler(refresh))
+router.post("/login", authLimiter, validateLogin, asyncHandler(login));
+router.post("/logout",  originCheck, asyncHandler(logout));
+router.post("/refresh", originCheck, validateRefresh, asyncHandler(refresh))
 
 export default router;

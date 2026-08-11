@@ -1,12 +1,16 @@
 import multer from "multer";
+import crypto from "crypto";
 import { AppError } from "../errors/AppErrors.js";
+import path from "path";
+
+const uploadDirectory = path.resolve("upload");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "upload/");
+    cb(null, uploadDirectory);
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    cb(null, crypto.randomUUID());
   },
 });
 

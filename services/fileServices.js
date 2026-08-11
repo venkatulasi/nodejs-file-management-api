@@ -16,6 +16,8 @@ import { pool } from "../database/db.js";
 import { createAuditLog } from "../repositories/audit.repository.js";
 import logger from "../logger/logger.js";
 import { validateFileName } from "../utils/validators.js";
+import { validateUploadedFile } from "../utils/fileValidator.js";
+import { getSafeFilePath } from "../utils/filePath.js";
 
 // get list
 export async function listFiles(
@@ -83,10 +85,18 @@ export async function listFiles(
 // create file post method
 export async function uploadFile(file, userId) {
 
+  if (!file) {
+    throw new AppError("File is required", 400);
+  }
+
   const client = await pool.connect();
 
+  let transactionStarted = false;
+
   try {
+    await validateUploadedFile(file);
     await client.query("BEGIN");
+    transactionStarted = true;
 
     const createdFile = await uploadFileRipository(file, userId, client);
 
@@ -112,16 +122,24 @@ export async function uploadFile(file, userId) {
    }
 
   } catch (error) {
-    await client.query("ROLLBACK");
+    if(transactionStarted){
+      await client.query("ROLLBACK");
+    }
 
-    try {
-      await fs.unlink(file.path);  
+    // Remove the physical file whenever the upload flow fails
+    if (file?.path){
+      try {
+      const safePath = getSafeFilePath(file.path);
+      
+      await fs.unlink(safePath);  
     } catch (unlinkError) {
       logger.error("Failed to remove uploaded file",{
         error: unlinkError,
         path: file.path,
       })
     }
+    }
+    
     throw error;    
   }finally{
     client.release();
@@ -196,8 +214,10 @@ export async function downloadFileService(fileId, user) {
 
   ensureFileOwnership(file, user);
 
+  const safePath = getSafeFilePath(file.path);
+
   try {
-    await fs.access(file.path);
+    await fs.access(safePath);
   } catch (error) {
     throw new AppError("File not found", 404);
   }

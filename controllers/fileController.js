@@ -7,6 +7,7 @@ import {
 } from "../services/fileServices.js";
 import fs from "fs";
 import path from "path";
+import { getSafeFilePath } from "../utils/filePath.js";
 
 export async function getFiles(req, res) {
   const { page, limit, search, sort, order, fromDate, toDate } = req.query;
@@ -50,7 +51,9 @@ export async function downloadFile(req, res) {
 
   res.setHeader("Content-Type", file.mime_type);
 
-  const stream = fs.createReadStream(path.resolve(file.path));
+  const safePath = getSafeFilePath(file.path);
+
+  const stream = fs.createReadStream(safePath);
 
   stream.on("error", (err) => {
     console.error(err);
