@@ -42,7 +42,7 @@ export async function logout(req, res) {
 
   res.clearCookie("refreshToken",{
     httpOnly: true,
-    secure: process.env.NODE_ENV,
+    secure: process.env.NODE_ENV === "development",
     sameSite: "strict"
   });
 

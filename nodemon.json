@@ -1,5 +1,5 @@
 {
-  "watch": ["controllers", "services", "repositories", "middleware", "routes", "app.js"],
+  "watch": ["controllers", "services", "repositories", "middleware", "routes", "app.js","fileValidator"],
   "ext": "js,json",
   "ignore": ["uploads", "logs", "node_modules"]
 }
