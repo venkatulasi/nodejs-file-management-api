@@ -144,3 +144,74 @@
 {"level":"info","message":"Connected to PostgreSQL"}
 {"level":"info","message":"Server running on port 3000"}
 {"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"POST /auth/login null 510ms"}
+{"level":"error","message":"null value in column \"token_hash\" of relation \"refresh_tokens\" violates not-null constraint","method":"POST","stack":"error: null value in column \"token_hash\" of relation \"refresh_tokens\" violates not-null constraint\n    at D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\pg\\lib\\client.js:652:17\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createRefreshTokenRepository (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/repositories/refreshToken.repository.js:20:5)\n    at async refreshService (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/services/auth.service.js:118:5)\n    at async refresh (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/controllers/auth.controller.js:63:5)\n    at async file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/utils/asyncHandler.js:4:7","url":"/auth/refresh"}
+{"level":"error","message":"POST /auth/refresh null 306ms"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"error","message":"null value in column \"token_hash\" of relation \"refresh_tokens\" violates not-null constraint","method":"POST","stack":"error: null value in column \"token_hash\" of relation \"refresh_tokens\" violates not-null constraint\n    at D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\pg\\lib\\client.js:652:17\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createRefreshTokenRepository (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/repositories/refreshToken.repository.js:20:5)\n    at async refreshService (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/services/auth.service.js:118:5)\n    at async refresh (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/controllers/auth.controller.js:63:5)\n    at async file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/utils/asyncHandler.js:4:7","url":"/auth/refresh"}
+{"level":"error","message":"POST /auth/refresh null 87ms"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"POST /auth/refresh null 79ms"}
+{"level":"info","message":"POST /auth/logout null 208ms"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"POST /auth/login null 620ms"}
+{"level":"error","message":"Access denied","method":"GET","stack":"AppError: Access denied\n    at file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/authorize.js:11:19\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/auth.middleware.js:24:5)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:295:15","url":"/users","userId":1}
+{"level":"warn","message":"GET /users null 8ms"}
+{"level":"info","message":"POST /auth/register null 154ms"}
+{"level":"info","message":"POST /auth/logout null 65ms"}
+{"level":"info","message":"POST /auth/login null 132ms"}
+{"level":"error","message":"Access denied","method":"GET","stack":"AppError: Access denied\n    at file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/authorize.js:11:19\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/auth.middleware.js:24:5)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:295:15","url":"/users","userId":2}
+{"level":"warn","message":"GET /users null 2ms"}
+{"level":"info","message":"POST /auth/logout null 168ms"}
+{"level":"info","message":"POST /auth/login null 96ms"}
+{"level":"error","message":"getUsersService is not defined","method":"GET","stack":"ReferenceError: getUsersService is not defined\n    at getUsers (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/controllers/user.controller.js:2:20)\n    at file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/utils/asyncHandler.js:4:13\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/authorize.js:14:9\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/auth.middleware.js:24:5)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)","url":"/users","userId":2}
+{"level":"error","message":"GET /users null 4ms"}
+{"level":"error","message":"getUsersService is not defined","method":"GET","stack":"ReferenceError: getUsersService is not defined\n    at getUsers (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/controllers/user.controller.js:2:20)\n    at file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/utils/asyncHandler.js:4:13\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/authorize.js:14:9\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/auth.middleware.js:24:5)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)","url":"/users","userId":2}
+{"level":"error","message":"GET /users null 2ms"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"GET /users null 65ms"}
+{"level":"info","message":"POST /auth/logout null 187ms"}
+{"level":"error","message":"Token has expired","method":"GET","stack":"AppError: Token has expired\n    at authMiddleware (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/auth.middleware.js:27:13)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:295:15\n    at processParams (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:582:12)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:291:5)\n    at Function.handle (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:186:3)","url":"/users"}
+{"level":"warn","message":"GET /users null 6ms"}
+{"level":"info","message":"POST /auth/login null 243ms"}
+{"level":"error","message":"Access denied","method":"GET","stack":"AppError: Access denied\n    at file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/authorize.js:11:19\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/auth.middleware.js:24:5)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:295:15","url":"/users","userId":1}
+{"level":"warn","message":"GET /users null 4ms"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"POST /auth/login null 1061ms"}
+{"level":"info","message":"GET /files null 264ms"}
+{"level":"error","message":"Access denied","method":"GET","stack":"AppError: Access denied\n    at file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/authorizePermissions.js:13:19\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at authMiddleware (file:///D:/Projects/NodeLearning/nodeprojects/express-file-api/middleware/auth.middleware.js:24:5)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at D:\\Projects\\NodeLearning\\nodeprojects\\express-file-api\\node_modules\\router\\index.js:295:15","url":"/users","userId":1}
+{"level":"warn","message":"GET /users null 8ms"}
+{"level":"info","message":"GET /files null 109ms"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}

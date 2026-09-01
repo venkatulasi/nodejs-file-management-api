@@ -18,6 +18,7 @@ import {
   getUserByIdRepository,
 } from "../repositories/refreshToken.repository.js";
 import { pool } from "../database/db.js";
+import { hashToken } from "../utils/tokenHash.js";
 
 export async function registerService(name, email, password) {
   const existingUser = await getUserByEmailRepository(email);
@@ -56,6 +57,7 @@ export async function loginService(email, password) {
 
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
+  const tokenHash = hashToken(refreshToken);
 
   const expiresAt = new Date(
     Date.now() + ms(process.env.JWT_REFRESH_EXPIRES_IN),
@@ -63,7 +65,7 @@ export async function loginService(email, password) {
 
   await createRefreshTokenRepository({
     userId: user.id,
-    token: refreshToken,
+    tokenHash,
     expiresAt,
   });
 
@@ -76,7 +78,9 @@ export async function loginService(email, password) {
 export async function refreshService(refreshToken) {
   const { sub } = verifyRefreshToken(refreshToken);
 
-  const storedToken = await getRefreshTokenRepository(refreshToken);
+  
+  const tokenHash = hashToken(refreshToken)
+  const storedToken = await getRefreshTokenRepository(tokenHash);
 
   if (!storedToken) {
     throw new AppError("Invalid refresh token", 401);
@@ -98,6 +102,7 @@ export async function refreshService(refreshToken) {
 
   const accessToken = generateAccessToken(user);
   const newRefreshToken = generateRefreshToken(user);
+  const newRefreshTokenHash = hashToken(newRefreshToken);
   
   //Expiry Check
   const expiresAt = new Date(
@@ -108,13 +113,12 @@ export async function refreshService(refreshToken) {
 
   try {
     await client.query("BEGIN");
-
-    await deleteRefreshTokenRepository(refreshToken, client);
+    await deleteRefreshTokenRepository(tokenHash, client);
 
     await createRefreshTokenRepository(
       {
         userId: user.id,
-        token: newRefreshToken,
+        tokenHash: newRefreshTokenHash,
         expiresAt,
       },
       client,
@@ -139,7 +143,7 @@ export async function logoutService(refreshToken) {
   if(!refreshToken){
     return;
   }
-
-  await deleteRefreshTokenRepository(refreshToken)
+  const tokenHash = hashToken(refreshToken);
+  await deleteRefreshTokenRepository(tokenHash)
 }
 

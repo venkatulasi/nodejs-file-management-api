@@ -10,7 +10,7 @@ import {
   updateFileNameRepository,
   softDeleteFileRepository,
 } from "../repositories/fileRepository.js";
-import { ensureFileOwnership } from "../utils/authorization.js";
+import { ensureFileAccess } from "../utils/authorization.js";
 import { recordAuditLog } from "./audit.service.js";
 import { pool } from "../database/db.js";
 import { createAuditLog } from "../repositories/audit.repository.js";
@@ -83,7 +83,7 @@ export async function listFiles(
 }
 
 // create file post method
-export async function uploadFile(file, userId) {
+export async function uploadFile(file, userId, auditContext) {
 
   if (!file) {
     throw new AppError("File is required", 400);
@@ -108,7 +108,8 @@ export async function uploadFile(file, userId) {
       metadata: {
         file_name: createdFile.original_name,
         stored_name: createdFile.stored_name,
-      }
+      },
+      ...auditContext
     },
     client
   );
@@ -161,7 +162,7 @@ export async function softDeleteFileService(id, user) {
     };
   }
 
-  ensureFileOwnership(file, user);
+  ensureFileAccess(file, user);
   const client = await pool.connect();
 
   try {
@@ -212,7 +213,7 @@ export async function downloadFileService(fileId, user) {
     throw new AppError("File already deleted", 404);
   }
 
-  ensureFileOwnership(file, user);
+  ensureFileAccess(file, user);
 
   const safePath = getSafeFilePath(file.path);
 
@@ -246,7 +247,7 @@ export async function renameFileService(originalName, fileId, user) {
     throw new AppError("File already deleted", 404);
   }
 
-  ensureFileOwnership(file, user);
+  ensureFileAccess(file, user);
 
   const newFileName = validateFileName(originalName);
 

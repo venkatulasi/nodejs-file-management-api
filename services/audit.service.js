@@ -1,7 +1,16 @@
 import { createAuditLog } from "../repositories/audit.repository.js";
 
 export async function recordAuditLog(
-  { userId, action, resourceType, resourceId, metadata },
+  {
+    userId,
+    action,
+    resourceType,
+    resourceId,
+    metadata,
+    ipAddress,
+    userAgent,
+    requestId,
+  },
   client,
 ) {
   return createAuditLog(
@@ -11,6 +20,9 @@ export async function recordAuditLog(
       resourceType,
       resourceId,
       metadata,
+      ipAddress,
+      userAgent,
+      requestId,
     },
     client,
   );
