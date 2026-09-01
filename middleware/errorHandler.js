@@ -8,6 +8,7 @@ export function errorHandler(err, req, res, next) {
     method: req.method,
     url: req.originalUrl,
     userId: req.user?.id,
+    requestId: req.requestId,
   });
 
   if(err instanceof multer.MulterError){

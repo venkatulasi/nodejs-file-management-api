@@ -1,6 +1,6 @@
 import { AppError } from "../errors/AppErrors.js"
 
-export function authorize(allowedRoles) {
+export function authorizeRoles(...allowedRoles) {
     return (req, res, next) => {
 
         if (!req.user) {
@@ -8,7 +8,7 @@ export function authorize(allowedRoles) {
         }
 
         if(!allowedRoles.includes(req.user.role)){
-            throw new AppError("Forbidden",403);
+            throw new AppError("Access denied",403);
         }
 
         next();

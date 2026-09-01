@@ -8,25 +8,33 @@ import {
 import fs from "fs";
 import path from "path";
 import { getSafeFilePath } from "../utils/filePath.js";
+import { getAuditContext } from "../utils/auditContext.js";
 
 export async function getFiles(req, res) {
   const { page, limit, search, sort, order, fromDate, toDate } = req.query;
-  const files = await listFiles({
-    page,
-    limit,
-    search,
-    sort,
-    order,
-    fromDate,
-    toDate,
-  },
-  req.user
-);
+  const files = await listFiles(
+    {
+      page,
+      limit,
+      search,
+      sort,
+      order,
+      fromDate,
+      toDate,
+    },
+    req.user,
+  );
   res.json(files);
 }
 
 export async function uploadFile(req, res) {
-  const result = await uploadFileService(req.file, req.user.id);
+  const auditContext = getAuditContext(req);
+
+  const result = await uploadFileService(
+    req.file, 
+    req.user.id,
+    auditContext
+);
 
   res.status(201).json(result);
 }
@@ -34,7 +42,7 @@ export async function uploadFile(req, res) {
 export async function deleteFile(req, res) {
   const { id } = req.params.id;
 
-  const result = await softDeleteFileService(id,req.user);
+  const result = await softDeleteFileService(id, req.user);
 
   res.status(200).json(result);
 }
@@ -70,11 +78,10 @@ export async function downloadFile(req, res) {
 }
 
 export async function renameFile(req, res) {
-
   const { id } = req.params;
   const { original_name } = req.body;
 
-  const result = await renameFileService(original_name,id,req.user);
-  
+  const result = await renameFileService(original_name, id, req.user);
+
   return res.status(200).json(result);
 }

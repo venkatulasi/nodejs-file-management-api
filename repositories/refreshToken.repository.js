@@ -1,11 +1,11 @@
 import { pool } from "../database/db.js";
 
-export async function createRefreshTokenRepository({userId, token, expiresAt},client = pool) {
+export async function createRefreshTokenRepository({userId, tokenHash, expiresAt},client = pool) {
     
     const query = `
         INSERT INTO refresh_tokens (
             user_id,
-            token,
+            token_hash,
             expires_at
         )
         VALUES ( $1, $2, $3 )
@@ -13,7 +13,7 @@ export async function createRefreshTokenRepository({userId, token, expiresAt},cl
 
     const values = [
         userId,
-        token,
+        tokenHash,
         expiresAt
     ];
 
@@ -25,10 +25,10 @@ export async function getRefreshTokenRepository(token) {
     const query = `
         SELECT 
             user_id,
-            token,
+            token_hash,
             expires_at
         FROM refresh_tokens
-        WHERE token = $1
+        WHERE token_hash = $1
     `;
 
     const result = await pool.query(query,[token]);
@@ -57,7 +57,7 @@ export async function deleteRefreshTokenRepository(token, client = pool) {
     
     const query = `
         DELETE FROM refresh_tokens
-        WHERE token = $1
+        WHERE token_hash = $1
         RETURNING id
     `;
     const result = await client.query(query, [token]);
