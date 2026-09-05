@@ -1,5 +1,4 @@
 import { pool } from "../database/db.js";
-import { AppError } from "../errors/AppErrors.js";
 import { handleDatabaseError } from "../errors/databaseError.js";
 
 //Create
