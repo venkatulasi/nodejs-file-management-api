@@ -263,3 +263,7 @@
 {"level":"info","message":"POST /auth/change-password null 223ms"}
 {"level":"info","message":"Server running on port 3000"}
 {"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
