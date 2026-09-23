@@ -1,0 +1,32 @@
+services:
+# Your existing Node.js app
+  backend:
+    build: .
+    container_name: secure-file-api
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.docker
+    depends_on:
+      - postgres
+# Your existing PostgreSQL database
+  postgres:
+    image: postgres:17
+    container_name: postgres-docker
+    environment:
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: file_management
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  
+  # NEW: Redis service
+  redis:
+    image: redis:8
+    container_name: redis-docker
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres-data:

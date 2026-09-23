@@ -6,9 +6,26 @@ import {
   getUsersRepository,
   updateUserPasswordRepository,
 } from "../repositories/user.respository.js";
+import { cacheGet, cacheSet } from "./cache.service.js";
+import { CACHE_CONFIG } from "../config/cache.js";
 
 export async function getUsersService() {
+  const cacheUsers = await cacheGet(CACHE_CONFIG.USERS.KEY);
+
+  if (cacheUsers) {
+    console.log("CACHE HIT");
+
+    return {
+      status: true,
+      users: cacheUsers,
+    };
+  }
+
+  console.log("CACHE MISS");
+
   const users = await getUsersRepository();
+
+  await cacheSet(CACHE_CONFIG.USERS.KEY, users, CACHE_CONFIG.USERS.TTL_SECONDS);
 
   return {
     success: true,

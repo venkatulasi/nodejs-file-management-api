@@ -19,6 +19,8 @@ import {
 } from "../repositories/refreshToken.repository.js";
 import { pool } from "../database/db.js";
 import { hashToken } from "../utils/tokenHash.js";
+import { cacheDelete } from "./cache.service.js";
+import { CACHE_CONFIG } from "../config/cache.js";
 
 export async function registerService(name, email, password) {
   const existingUser = await getUserByEmailRepository(email);
@@ -36,20 +38,26 @@ export async function registerService(name, email, password) {
   };
 
   await createUserRepositroy(userData);
+
+  await cacheDelete(CACHE_CONFIG.USERS.KEY);
+  
 }
 
 export async function loginService(email, password) {
   const user = await getUserForLoginRepository(email);
+  
 
   if (!user) {
     throw new AppError("Invalid email or password", 401);
   }
+  
 
   if (!user.is_active) {
     throw new AppError("Account is inactive", 403);
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
+  
 
   if (!isMatch) {
     throw new AppError("Invalid email or password", 401);

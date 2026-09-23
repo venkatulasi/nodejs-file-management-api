@@ -267,3 +267,172 @@
 {"level":"info","message":"Connected to PostgreSQL"}
 {"level":"info","message":"Server running on port 3000"}
 {"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"warn","message":"POST //auth/login null 879ms"}
+{"level":"warn","message":"POST //auth/login null 3ms"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"warn","message":"POST //auth/login null 422ms"}
+{"level":"info","message":"POST /auth/login null 310ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"error","message":"Invalid email or password","method":"POST","stack":"AppError: Invalid email or password\n    at loginService (file:///D:/projects/backend/nodejs-file-management-api/services/auth.service.js:55:11)\n    at async login (file:///D:/projects/backend/nodejs-file-management-api/controllers/auth.controller.js:23:41)\n    at async file:///D:/projects/backend/nodejs-file-management-api/utils/asyncHandler.js:4:7","url":"/auth/login"}
+{"level":"warn","message":"POST /auth/login null 865ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"error","message":"Invalid email or password","method":"POST","stack":"AppError: Invalid email or password\n    at loginService (file:///D:/projects/backend/nodejs-file-management-api/services/auth.service.js:62:11)\n    at async login (file:///D:/projects/backend/nodejs-file-management-api/controllers/auth.controller.js:23:41)\n    at async file:///D:/projects/backend/nodejs-file-management-api/utils/asyncHandler.js:4:7","url":"/auth/login"}
+{"level":"warn","message":"POST /auth/login null 301ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"error","message":"Invalid email or password","method":"POST","stack":"AppError: Invalid email or password\n    at loginService (file:///D:/projects/backend/nodejs-file-management-api/services/auth.service.js:64:11)\n    at async login (file:///D:/projects/backend/nodejs-file-management-api/controllers/auth.controller.js:23:41)\n    at async file:///D:/projects/backend/nodejs-file-management-api/utils/asyncHandler.js:4:7","url":"/auth/login"}
+{"level":"warn","message":"POST /auth/login null 138ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"error","message":"Invalid email or password","method":"POST","stack":"AppError: Invalid email or password\n    at loginService (file:///D:/projects/backend/nodejs-file-management-api/services/auth.service.js:64:11)\n    at async login (file:///D:/projects/backend/nodejs-file-management-api/controllers/auth.controller.js:23:41)\n    at async file:///D:/projects/backend/nodejs-file-management-api/utils/asyncHandler.js:4:7","url":"/auth/login"}
+{"level":"warn","message":"POST /auth/login null 114ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"error","message":"Invalid email or password","method":"POST","stack":"AppError: Invalid email or password\n    at loginService (file:///D:/projects/backend/nodejs-file-management-api/services/auth.service.js:64:11)\n    at async login (file:///D:/projects/backend/nodejs-file-management-api/controllers/auth.controller.js:23:41)\n    at async file:///D:/projects/backend/nodejs-file-management-api/utils/asyncHandler.js:4:7","url":"/auth/login"}
+{"level":"warn","message":"POST /auth/login null 143ms"}
+{"level":"info","message":"POST /auth/login null 184ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"GET /users null 84ms"}
+{"level":"info","message":"GET /users null 5ms"}
+{"level":"info","message":"GET /users null 56ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"error","message":"Token has expired","method":"GET","stack":"AppError: Token has expired\n    at authMiddleware (file:///D:/projects/backend/nodejs-file-management-api/middleware/auth.middleware.js:27:13)\n    at Layer.handleRequest (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:295:15\n    at processParams (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:582:12)\n    at next (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:291:5)\n    at router.handle (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:186:3)","url":"/users"}
+{"level":"warn","message":"GET /users null 21ms"}
+{"level":"info","message":"POST /auth/login null 164ms"}
+{"level":"info","message":"POST /auth/login null 100ms"}
+{"level":"info","message":"GET /users null 15ms"}
+{"level":"info","message":"GET /users null 4ms"}
+{"level":"info","message":"POST /auth/register null 269ms"}
+{"level":"info","message":"GET /users null 183ms"}
+{"level":"info","message":"GET /users null 4ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"error","message":"Token has expired","method":"GET","stack":"AppError: Token has expired\n    at authMiddleware (file:///D:/projects/backend/nodejs-file-management-api/middleware/auth.middleware.js:27:13)\n    at Layer.handleRequest (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\lib\\route.js:157:13)\n    at Route.dispatch (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\lib\\route.js:117:3)\n    at handle (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:435:11)\n    at Layer.handleRequest (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\lib\\layer.js:152:17)\n    at D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:295:15\n    at processParams (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:582:12)\n    at next (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:291:5)\n    at router.handle (D:\\projects\\backend\\nodejs-file-management-api\\node_modules\\router\\index.js:186:3)","url":"/users"}
+{"level":"warn","message":"GET /users null 58ms"}
+{"level":"info","message":"POST /auth/login null 365ms"}
+{"level":"info","message":"GET /users null 17ms"}
+{"level":"info","message":"GET /users null 25ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"warn","message":"Redis unavailable. Continuing without cache: "}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"GET /users null 113ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"warn","message":"Redis unavailable. Continuing without cache: "}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"POST /auth/login null 1142ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"POST /auth/login null 310ms"}
+{"level":"info","message":"POST /auth/login null 379ms"}
+{"level":"info","message":"POST /auth/login null 259ms"}
+{"level":"info","message":"POST /auth/login null 212ms"}
+{"level":"info","message":"POST /auth/login null 147ms"}
+{"level":"info","message":"POST /auth/login null 395ms"}
+{"level":"info","message":"POST /auth/login null 283ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"POST /auth/login null 452ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"POST /auth/login null 331ms"}
+{"level":"info","message":"POST /auth/login null 275ms"}
+{"level":"info","message":"POST /auth/login null 156ms"}
+{"level":"warn","message":"POST /auth/login null 13ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"POST /auth/login null 495ms"}
+{"level":"info","message":"GET /users null 121ms"}
+{"level":"info","message":"GET /users null 6ms"}
+{"level":"info","message":"POST /auth/register null 301ms"}
+{"level":"info","message":"GET /users null 99ms"}
+{"level":"info","message":"GET /users null 5ms"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"Connected to PostgreSQL"}
+{"level":"info","message":"Connected to Redis"}
+{"level":"info","message":"Server running on port 3000"}
+{"level":"info","message":"POST /auth/login null 207ms"}
+{"level":"info","message":"GET /users null 18ms"}
+{"level":"info","message":"GET /users null 12ms"}

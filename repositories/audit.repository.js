@@ -23,7 +23,7 @@ export async function createAuditLog({
             user_agent,
             request_id
         ) 
-        VALUES ($1, $2, $3, $4, $5. $6, $7, $8)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING id, created_at
     `;
 

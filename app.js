@@ -11,8 +11,9 @@ import { requestLogger } from "./middleware/requestLogger.js";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-import { apiLimiter } from "./middleware/rateLimiter.js";
+import { apiLimiter, initializeAuthLimiter } from "./middleware/rateLimiter.js";
 import { requestId } from "./middleware/requestId.js";
+import { connectRedis } from "./config/redis.js";
 
 
 const app = express();
@@ -48,14 +49,29 @@ app.use("/users", userRoutes);
 
 app.use(errorHandler);
 
-pool.connect().then(() => {
-    logger.info("Connected to PostgreSQL")   
-})
-.catch((err)=>{
-    logger.error(`Database connection failed: ${err.message}`);
-    
-})
+async function startServer() {
+  try {
+    await pool.query("SELECT 1");
+    logger.info("Connected to PostgreSQL");
 
-app.listen(config.port, () => {
-  logger.info(`Server running on port ${config.port}`)
-});
+      } catch (err) {
+    logger.error(`Server startup failed: ${err.message}`);
+    process.exit(1);
+  }
+
+  try {
+    await connectRedis();
+    logger.info("Connected to Redis");
+  } catch (error) {
+    logger.warn(`Redis unavailable. Continuing without cache: ${error.message}`)
+  }
+
+  initializeAuthLimiter();
+  
+  app.listen(config.port, () => {
+      logger.info(`Server running on port ${config.port}`);
+    });
+
+}
+
+startServer();
