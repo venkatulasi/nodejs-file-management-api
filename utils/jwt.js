@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { requireEnv } from "../config/config.js";
 
 export function generateAccessToken(user) {
   return jwt.sign(
@@ -7,19 +8,19 @@ export function generateAccessToken(user) {
       email: user.email,
       role: user.role,
     },
-    process.env.JWT_SECRET,
+    requireEnv("JWT_SECRET"),
     {
-      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+      expiresIn: requireEnv("JWT_ACCESS_EXPIRES_IN"),
     },
   );
 }
 
 export function verifyToken(token) {
-  return jwt.verify(token, process.env.JWT_SECRET);
+  return jwt.verify(token, requireEnv("JWT_SECRET"));
 }
 
 export function verifyRefreshToken(token){
-  return jwt.verify(token, process.env.JWT_REFRESH_SECRET)  
+  return jwt.verify(token, requireEnv("JWT_REFRESH_SECRET"))  
 }
 
 export function generateRefreshToken(user){
@@ -28,9 +29,9 @@ export function generateRefreshToken(user){
     {
       sub: user.id
     },
-    process.env.JWT_REFRESH_SECRET,
+    requireEnv("JWT_REFRESH_SECRET"),
     {
-      expiresIn: process.env.JWT_REFRESH_EXPIRES_IN
+      expiresIn: requireEnv("JWT_REFRESH_EXPIRES_IN")
     }
   )
 }

@@ -6,7 +6,12 @@ COPY package*.json ./
 
 RUN npm ci --omit=dev
 
-COPY . .
+COPY --chown=node:node . .
+
+RUN mkdir -p /app/upload /app/logs \
+    && chown -R node:node /app/upload /app/logs
+
+USER  node
 
 EXPOSE 3000
 

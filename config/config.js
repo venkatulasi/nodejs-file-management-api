@@ -2,14 +2,24 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+export function requireEnv(name) {
+    const value = process.env[name];
+
+    if(!value || value.trim() === ""){
+        throw new Error(`Missing required environment variable ${name}`);
+    }
+    
+    return value;
+}   
+
 export const config = {
     port: process.env.PORT || 3000,
 
     db:{
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        database: process.env.DB_NAME,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD
+        host: requireEnv("DB_HOST"),
+        port: requireEnv("DB_PORT"),
+        database: requireEnv("DB_NAME"),
+        user: requireEnv("DB_USER"),
+        password: requireEnv("DB_PASSWORD")
     }
 };

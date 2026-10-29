@@ -1,7 +1,8 @@
 import { createClient } from "redis";
+import { requireEnv } from "./config.js";
 
 export const redisClient = createClient({
-    url: process.env.REDIS_URL,
+    url: requireEnv("REDIS_URL"),
     socket:{
         reconnectStrategy:false
     }

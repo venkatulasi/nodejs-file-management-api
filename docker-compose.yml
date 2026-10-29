@@ -7,8 +7,22 @@ services:
       - "3000:3000"
     env_file:
       - .env.docker
+    volumes:
+      - upload-data:/app/upload
     depends_on:
-      - postgres
+       postgres:
+          condition: service_healthy
+    healthcheck:
+      test: [
+        "CMD", 
+        "node",
+        "-e",
+        "fetch('http://localhost:3000/health/ready').then(r => { if (!r.ok) process.exit(1)}).catch(() => process.exit(1))"
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 # Your existing PostgreSQL database
   postgres:
     image: postgres:17
@@ -20,6 +34,12 @@ services:
       - "5433:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d file_management"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   
   # NEW: Redis service
   redis:
@@ -27,6 +47,13 @@ services:
     container_name: redis-docker
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
 volumes:
   postgres-data:
+  upload-data:
