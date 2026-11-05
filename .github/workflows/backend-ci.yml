@@ -7,6 +7,11 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: write
+
+
 jobs:
   test-and-build:
     runs-on: ubuntu-24.04
@@ -41,3 +46,21 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t secure-file-api:ci .
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/venkatulasi/nodejs-file-management-api:latest
+            ghcr.io/venkatulasi/nodejs-file-management-api:${{ github.sha }}
