@@ -1,0 +1,493 @@
+openapi: 3.0.3
+
+info:
+  title: Secure File Management API
+  version: 1.0.0
+  description: >
+    REST API built with Node.js, Express, PostgreSQL, Redis,
+    JWT authentication, and permission-based authorization.
+
+
+tags:
+  - name: Health
+    description: Application liveness and readiness
+  - name: Authentication
+    description: Authentication and refresh-token management
+  - name: Users
+    description: User management
+  - name: Files
+    description: File management
+
+paths:
+  /health/live:
+    get:
+      tags: [Health]
+      summary: Check application liveness
+      responses:
+        '200':
+          description: Application is alive
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /health/ready:
+    get:
+      tags: [Health]
+      summary: Check PostgreSQL and Redis readiness
+      responses:
+        '200':
+          description: Application is ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Readiness'
+        '503':
+          description: One or more required readiness checks failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Readiness'
+
+  /auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password]
+              properties:
+                name:
+                  type: string
+                  example: Example User
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                success: true
+                message: User created successfully
+        '400':
+          description: Invalid registration data
+        '409':
+          description: Email already exists, if mapped to this status by the error handler
+
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Log in
+      description: >
+        Returns an access token in JSON and sets an HttpOnly
+        refreshToken cookie.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Login successful
+          headers:
+            Set-Cookie:
+              description: HttpOnly refreshToken cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Invalid login request
+        '401':
+          description: Invalid email or password
+        '403':
+          description: Account inactive
+        '429':
+          description: Too many login attempts
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Log out
+      description: >
+        Uses the refreshToken cookie, revokes the token through
+        the logout service, and clears the cookie. The origin
+        check middleware also applies.
+      security:
+        - refreshCookie: []
+      responses:
+        '200':
+          description: Logged out successfully
+          headers:
+            Set-Cookie:
+              description: Clears the refreshToken cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                success: true
+                message: Logged out successfully
+        '403':
+          description: Request rejected by origin checking, if configured to return 403
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      description: >
+        Reads the refreshToken HttpOnly cookie, rotates the refresh
+        token, sets a new cookie, and returns a new access token.
+        The origin check middleware also applies.
+      security:
+        - refreshCookie: []
+      responses:
+        '200':
+          description: Token refreshed successfully
+          headers:
+            Set-Cookie:
+              description: Rotated HttpOnly refreshToken cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Missing, invalid, or expired refresh token
+        '403':
+          description: Request rejected by origin checking, if configured to return 403
+
+  /auth/change-password:
+    post:
+      tags: [Authentication]
+      summary: Change current user's password
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword:
+                  type: string
+                  format: password
+                newPassword:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+              example:
+                success: true
+                message: Password changed successfully
+        '400':
+          description: Invalid password data
+        '401':
+          description: Authentication required
+
+  /users:
+    get:
+      tags: [Users]
+      summary: List users
+      description: Requires user:read permission.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Result returned by getUsersService
+          content:
+            application/json:
+              schema:
+                description: Exact response shape depends on getUsersService.
+        '401':
+          description: Authentication required
+        '403':
+          description: Insufficient permissions
+
+  /files:
+    get:
+      tags: [Files]
+      summary: List accessible files
+      description: >
+        Returns the result of listFiles for the authenticated user.
+        Pagination defaults and allowed sort values depend on
+        validationPagination and listFiles.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+          description: Page number
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+          description: Number of items per page
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search text
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort field; allowed values depend on validation
+        - name: order
+          in: query
+          schema:
+            type: string
+          description: Sort direction; allowed values depend on validation
+        - name: fromDate
+          in: query
+          schema:
+            type: string
+          description: Start date filter; accepted format depends on validation
+        - name: toDate
+          in: query
+          schema:
+            type: string
+          description: End date filter; accepted format depends on validation
+      responses:
+        '200':
+          description: Result returned by listFiles
+          content:
+            application/json:
+              schema:
+                description: Exact response shape depends on listFiles.
+        '400':
+          description: Invalid pagination or filter parameters
+        '401':
+          description: Authentication required
+
+  /files/upload:
+    post:
+      tags: [Files]
+      summary: Upload a file
+      description: >
+        Requires file:upload permission. Accepts PDF, PNG, and JPEG
+        files up to 5 MiB. MIME type filtering alone does not verify
+        actual file contents.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: File uploaded; response returned by uploadFileService
+          content:
+            application/json:
+              schema:
+                description: Exact response shape depends on uploadFileService.
+        '400':
+          description: Invalid or unsupported file
+        '401':
+          description: Authentication required
+        '403':
+          description: Insufficient permissions
+        '413':
+          description: File too large, if mapped to this status by error handling
+
+  /files/{id}:
+    parameters:
+      - $ref: '#/components/parameters/FileId'
+    delete:
+      tags: [Files]
+      summary: Soft-delete a file
+      description: Requires file:delete permission.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Result returned by softDeleteFileService
+          content:
+            application/json:
+              schema:
+                description: Exact response shape depends on softDeleteFileService.
+        '400':
+          description: Invalid file ID
+        '401':
+          description: Authentication required
+        '403':
+          description: Insufficient permissions
+        '404':
+          description: File not found
+    patch:
+      tags: [Files]
+      summary: Rename a file
+      description: Requires file:rename permission.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [original_name]
+              properties:
+                original_name:
+                  type: string
+                  example: updated-document.pdf
+      responses:
+        '200':
+          description: Result returned by renameFileService
+          content:
+            application/json:
+              schema:
+                description: Exact response shape depends on renameFileService.
+        '400':
+          description: Invalid file ID or rename request
+        '401':
+          description: Authentication required
+        '403':
+          description: Insufficient permissions
+        '404':
+          description: File not found
+
+  /files/{id}/download:
+    get:
+      tags: [Files]
+      summary: Download a file
+      description: Requires file:read permission.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/FileId'
+      responses:
+        '200':
+          description: File stream
+          headers:
+            Content-Disposition:
+              description: Attachment filename
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid file ID
+        '401':
+          description: Authentication required
+        '403':
+          description: Insufficient permissions
+        '404':
+          description: File not found
+        '500':
+          description: File streaming failed
+
+components:
+  parameters:
+    FileId:
+      name: id
+      in: path
+      required: true
+      description: File ID
+      schema:
+        type: integer
+        minimum: 1
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Access token sent in the Authorization header.
+    refreshCookie:
+      type: apiKey
+      in: cookie
+      name: refreshToken
+      description: >
+        HttpOnly refresh-token cookie issued during login and rotated
+        during refresh. Browser cookie restrictions may affect Swagger UI.
+
+  schemas:
+    MessageResponse:
+      type: object
+      required: [success, message]
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
+    TokenResponse:
+      type: object
+      required: [success, accessToken]
+      properties:
+        success:
+          type: boolean
+          example: true
+        accessToken:
+          type: string
+          description: JWT access token
+
+    Readiness:
+      type: object
+      required: [status, services]
+      properties:
+        status:
+          type: string
+          example: ready
+        services:
+          type: object
+          properties:
+            postgres:
+              type: string
+              example: up
+            redis:
+              type: string
+              example: up

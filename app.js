@@ -10,6 +10,8 @@ import helmet from "helmet";
 import cors from "cors";
 import { apiLimiter } from "./middleware/rateLimiter.js";
 import { requestId } from "./middleware/requestId.js";
+import swaggerUi from "swagger-ui-express";
+import { swaggerDocument } from "./config/swagger.js";
 
 
 const app = express();
@@ -44,6 +46,12 @@ app.use(fileRoutes);
 app.use("/auth",authRoutes);
 app.use("/users", userRoutes);
 app.use("/health", healthRoutes);
+
+app.use(
+  "/api-docs", 
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerDocument)
+);
 
 app.use(errorHandler);
 

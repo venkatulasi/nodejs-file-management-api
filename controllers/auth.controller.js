@@ -24,7 +24,7 @@ export async function login(req, res) {
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "development",
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: ms(process.env.JWT_REFRESH_EXPIRES_IN),
   });
@@ -42,7 +42,7 @@ export async function logout(req, res) {
 
   res.clearCookie("refreshToken",{
     httpOnly: true,
-    secure: process.env.NODE_ENV === "development",
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict"
   });
 
@@ -64,7 +64,7 @@ export async function refresh(req, res) {
 
   res.cookie("refreshToken", newRefreshToken, {
     httpOnly: true,    
-    secure: process.env.NODE_ENV === "development",
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: ms(process.env.JWT_REFRESH_EXPIRES_IN),
   });
