@@ -64,3 +64,19 @@ jobs:
           tags: |
             ghcr.io/venkatulasi/nodejs-file-management-api:latest
             ghcr.io/venkatulasi/nodejs-file-management-api:${{ github.sha }}
+            
+      - name: Trigger Render deployment
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK" ]; then
+            echo "Render deploy hook is missing"
+            exit 1
+          fi
+
+          curl --fail --silent --show-error \
+            --retry 3 \
+            --retry-delay 5 \
+            --request POST \
+            "$RENDER_DEPLOY_HOOK"
