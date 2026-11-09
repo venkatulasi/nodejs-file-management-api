@@ -8,6 +8,12 @@ export function originCheck(req, res, next) {
 
   const origin = req.get("origin");
 
+  console.log("Origin validation:", {
+    origin,
+    allowedOrigins,
+    allowed: allowedOrigins.includes(origin)
+  });
+  
   if (!origin) {
     return next();
   }
